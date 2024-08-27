@@ -1,14 +1,12 @@
 import csv
 import os
 import re
+import time
 
 import requests
+from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-import time
-from bs4 import BeautifulSoup
 
 URL = "https://jobs.dou.ua/vacancies/?category=Python"
 
@@ -35,8 +33,9 @@ def get_soup(url: str):
     vacancies = soup.find_all("a", class_="vt")
     return [parse_singe_vac(vacancy.get("href")) for vacancy in vacancies]
 
+
 def clean_text(text):
-    return re.sub(r'[^\w\s]', '', text)
+    return re.sub(r"[^\w\s]", "", text)
 
 
 def parse_singe_vac(str):
@@ -60,7 +59,8 @@ def parse_singe_vac(str):
                 soup.find("div", class_="b-typo vacancy-section")
                 .get_text(separator="\n", strip=True)
                 .replace("\xa0", " ")
-            ) if soup.find("div", class_="b-typo vacancy-section")
+            )
+            if soup.find("div", class_="b-typo vacancy-section")
             else None
         ),
     }
